@@ -1,12 +1,12 @@
-"use client" // Cette directive indique que c'est un Client Component (avec interactivité)
+"use client"
 
 import type React from "react"
 
 import { useState } from "react"
 import WeatherDisplay from "./weather-display"
+import { useAppContext } from "@/context/app-context"
 
 // TypeScript: définition du type pour les données météo
-// Cela aide à structurer les données et obtenir l'autocomplétion
 interface WeatherData {
   city: string
   temperature: number
@@ -17,6 +17,8 @@ interface WeatherData {
 }
 
 export default function WeatherSearch() {
+  const { translations } = useAppContext()
+
   // États pour stocker la ville saisie et les données météo
   const [city, setCity] = useState("")
   const [weather, setWeather] = useState<WeatherData | null>(null)
@@ -25,25 +27,24 @@ export default function WeatherSearch() {
 
   // Fonction qui sera appelée lors de la soumission du formulaire
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault() // Empêche le rechargement de la page
+    e.preventDefault()
 
-    if (!city.trim()) return // Vérifie que la ville n'est pas vide
+    if (!city.trim()) return
 
     try {
       setLoading(true)
       setError(null)
 
-      // Appel à notre API route avec la ville comme paramètre de requête
       const response = await fetch(`/api/weather?city=${encodeURIComponent(city)}`)
 
       if (!response.ok) {
-        throw new Error("Impossible de récupérer les données météo")
+        throw new Error(translations.error)
       }
 
       const data = await response.json()
       setWeather(data)
     } catch (err) {
-      setError("Erreur lors de la récupération des données météo")
+      setError(translations.error)
       console.error(err)
     } finally {
       setLoading(false)
@@ -52,33 +53,33 @@ export default function WeatherSearch() {
 
   return (
     <div className="space-y-6">
+      <h1 className="text-3xl font-bold text-center mb-8">{translations.appTitle}</h1>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="city" className="block text-sm font-medium mb-1">
-            Entrez une ville
+            {translations.enterCity}
           </label>
           <input
             type="text"
             id="city"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Paris, New York, Tokyo..."
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700"
+            placeholder={translations.placeholder}
           />
         </div>
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50"
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50 dark:bg-blue-600 dark:hover:bg-blue-700"
         >
-          {loading ? "Chargement..." : "Rechercher"}
+          {loading ? translations.loading : translations.search}
         </button>
       </form>
 
-      {/* Affichage des erreurs */}
-      {error && <div className="p-4 bg-red-100 text-red-700 rounded-md">{error}</div>}
+      {error && <div className="p-4 bg-red-100 text-red-700 rounded-md dark:bg-red-900 dark:text-red-200">{error}</div>}
 
-      {/* Affichage des données météo si disponibles */}
       {weather && <WeatherDisplay weather={weather} />}
     </div>
   )

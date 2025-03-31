@@ -1,23 +1,18 @@
 import Image from "next/image";
-import WeatherSearch from "../components/weather-search";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Application Météo",
-  description: "Une application météo simple et efficace",
-}
+import Header from "@/components/header";
+import WeatherSearch from "@/components/weather-search";
 
 export default function Home() {
   return (
-        <main className=" flex min-h-screen flex-col items-center justify-between p-4 md:p-24">
-    <div className=" w-full max-w-md mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 font-[family-name:var(--font-geist-sans)]">Application Météo</h1>
-
-        {/* Nous utilisons notre composant de recherche météo ici */}
+    <main className="flex min-h-screen flex-col items-center p-4 md:p-24">
+      <div className="w-full max-w-md mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <Header />
+        </div>
         <WeatherSearch />
       </div>
       <div className="grid items-center justify-items-center max-h-screen p-4 pb-10 gap-5 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <p>Cette application a été réalisée avec</p>
+        <p>Made with</p>
         <div className="items-center sm:items-start">
           <Image
             className="dark:invert"
