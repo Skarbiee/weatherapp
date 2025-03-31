@@ -1,9 +1,10 @@
 "use client"
 
 import type React from "react"
+
 import { useState } from "react"
 import WeatherDisplay from "./weather-display"
-import { useAppContext } from "@/context/app-language"
+import { useAppContext } from "@/context/app-context"
 
 // TypeScript: définition du type pour les données météo
 interface WeatherData {
