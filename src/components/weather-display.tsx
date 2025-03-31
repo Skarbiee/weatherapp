@@ -1,5 +1,6 @@
-// Ce composant n'a pas besoin d'interactivité, mais comme il reçoit des props
-// d'un composant client, il doit aussi être un composant client
+"use client";
+
+import {useAppContext} from "@/context/app-language";
 
 // TypeScript: définition du type pour les props du composant
 interface WeatherData {
@@ -16,6 +17,7 @@ interface WeatherDisplayProps {
 }
 
 export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
+  const { translations } = useAppContext();
   
   const getBackgroundColor = (iconCode: string) => {
     // 01 = ciel dégagé
@@ -65,11 +67,11 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
 
         <div className="grid grid-cols-2 gap-4 mt-4">
           <div>
-            <p className={isDarkBackground ? "text-gray-300" : "text-gray-500"}>Humidité</p>
+            <p className={isDarkBackground ? "text-gray-300" : "text-gray-500"}>{translations.humidity}</p>
             <p className={`font-medium ${textColorClass}`}>{weather.humidity}%</p>
           </div>
           <div>
-            <p className={isDarkBackground ? "text-gray-300" : "text-gray-500"}>Vent</p>
+            <p className={isDarkBackground ? "text-gray-300" : "text-gray-500"}>{translations.wind}</p>
             <p className={` ${textColorClass}`}>{weather.windSpeed} km/h</p>
           </div>
         </div>
