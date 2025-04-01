@@ -1,6 +1,7 @@
 "use client"
 
 import { useAppContext } from "@/context/app-context"
+import { Droplets, Wind } from "lucide-react"
 
 // TypeScript: définition du type pour les props du composant
 interface WeatherData {
@@ -17,63 +18,49 @@ interface WeatherDisplayProps {
 }
 
 export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
-  const { theme, translations } = useAppContext()
+  const { theme } = useAppContext();
 
   // Fonction pour déterminer la couleur de fond en fonction de l'icône météo
   const getBackgroundColor = (iconCode: string) => {
     const isNight = iconCode.endsWith("n")
     const isDarkMode = theme === "dark"
 
-    // Adapter les couleurs en fonction du thème et du jour/nuit
-    // 01 = ciel dégagé
-    // 02, 03, 04 = nuages
-    // 09, 10 = pluie
-    // 11 = orage
-    // 13 = neige
-    // 50 = brouillard
-    if (iconCode.startsWith("01")) {
-      // Ciel dégagé
-      if (isDarkMode) {
-        // dark mode
+    // Codes d'icône et background-colors
+    if (iconCode.startsWith("01")) { // Ciel dégagé
+      if (isDarkMode) { // dark mode
         return isNight
-          ? "bg-gradient-to-br from-gray-900 to-blue-950" // Nuit claire
-          : "bg-gradient-to-br from-blue-600 to-blue-300" // Jour ensoleillé
-      } else {
-        // light mode
+          ? "bg-gradient-to-br from-gray-900 to-blue-950 shadow-blue-900" // Nuit claire
+          : "bg-gradient-to-br from-blue-600 to-blue-300 shadow-blue-400/50" // Jour ensoleillé
+      } else { // light mode
         return isNight
-          ? "bg-gradient-to-br from-gray-800 to-blue-900 text-white" // Nuit claire
-          : "bg-gradient-to-br from-yellow-300 to-blue-500" // Jour ensoleillé
+          ? "bg-gradient-to-br from-gray-800 to-blue-900 shadow-blue-900" // Nuit claire
+          : "bg-gradient-to-br from-yellow-300 to-blue-500 shadow-blue-300/50" // Jour ensoleillé
       }
-    } else if (iconCode.startsWith("02") || iconCode.startsWith("03") || iconCode.startsWith("04")) {
-      // Nuageux
+    } else if (iconCode.startsWith("02") || iconCode.startsWith("03") || iconCode.startsWith("04")) { // Nuages
       if (isDarkMode) {
         return "bg-gradient-to-br from-gray-700 to-gray-600" // dark mode
       } else {
         return "bg-gradient-to-br from-gray-300 to-blue-400" // light mode
       }
-    } else if (iconCode.startsWith("09") || iconCode.startsWith("10")) {
-      // Pluie
+    } else if (iconCode.startsWith("09") || iconCode.startsWith("10")) { // Pluie
       if (isDarkMode) {
-        return "bg-gradient-to-br from-gray-800 to-blue-300"
+        return "bg-gradient-to-br from-gray-800 to-blue-300 shadow-blue-400" // dark mode
       } else {
-        return "bg-gradient-to-br from-blue-300 to-gray-400"
+        return "bg-gradient-to-br from-blue-300 to-gray-400 shadow-gray-600" // light mode
       }
-    } else if (iconCode.startsWith("11")) {
-      // Orage
-      return "bg-gradient-to-br from-gray-900 to-gray-800 text-white"
-    } else if (iconCode.startsWith("13")) {
-      // Neige
+    } else if (iconCode.startsWith("11")) { // Orage
+      return "bg-gradient-to-br from-gray-900 to-gray-800 shadow-orange-900"
+    } else if (iconCode.startsWith("13")) { // Neige
       if (isDarkMode) {
-        return "bg-gradient-to-br from-gray-700 to-blue-200"
+        return "bg-gradient-to-br from-gray-700 to-blue-200 shadow-gray-600" // dark mode
       } else {
-        return "bg-gradient-to-br from-gray-300 to-blue-200"
+        return "bg-gradient-to-br from-gray-600 to-blue-200 shadow-blue-200" // light mode
       }
-    } else if (iconCode.startsWith("50")) {
-      // Brouillard
+    } else if (iconCode.startsWith("50")) { // Brouillard
       if (isDarkMode) {
-        return "bg-gradient-to-br from-gray-700 to-gray-800" // light mode
+        return "bg-gradient-to-br from-gray-700 to-gray-800 shadow-gray-900" // dark mode
       } else {
-        return "bg-gradient-to-br from-gray-400 to-gray-500" // dark mode
+        return "bg-gradient-to-br from-gray-400 to-gray-500 shadow-gray-600" // light mode
       }
     }
 
@@ -105,11 +92,15 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
 
         <div className="grid grid-cols-2 gap-4 mt-4">
           <div>
-            <p className={isDarkBackground ? "text-gray-300" : "text-gray-500"}>{translations.humidity}</p>
+            <span className={isDarkBackground ? "text-gray-300" : "text-gray-500"}>
+              <Droplets className="w-7 h-7 mr-1" />
+            </span>
             <p className={`font-medium ${textColorClass}`}>{weather.humidity}%</p>
           </div>
           <div>
-            <p className={isDarkBackground ? "text-gray-300" : "text-gray-500"}>{translations.wind}</p>
+            <span className={isDarkBackground ? "text-gray-300" : "text-gray-500"}>
+              <Wind className="w-7 h-7 mr-1" />
+            </span>
             <p className={`font-medium ${textColorClass}`}>{weather.windSpeed} km/h</p>
           </div>
         </div>
