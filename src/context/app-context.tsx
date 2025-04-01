@@ -21,24 +21,22 @@ const translationsData = {
     enterCity: "Entrez une ville",
     search: "Rechercher",
     loading: "Chargement...",
-    humidity: "Humidité",
-    wind: "Vent",
     error: "Erreur lors de la récupération des données météo",
     placeholder: "Paris, New York, Tokyo...",
+    made: "Réalisée avec",
   },
   en: {
     appTitle: "Weather App",
     enterCity: "Enter a city",
     search: "Search",
     loading: "Loading...",
-    humidity: "Humidity",
-    wind: "Wind",
     error: "Error retrieving weather data",
     placeholder: "Paris, New York, Tokyo...",
+    made: "Made with",
   },
 }
 
-// Création du contexte avec des valeurs par défaut
+// Contexte avec des valeurs par défaut
 const AppContext = createContext<AppContextType>({
   theme: "light",
   toggleTheme: () => {},
@@ -78,15 +76,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (savedLanguage && (savedLanguage === "fr" || savedLanguage === "en")) {
       setLanguage(savedLanguage)
     } else {
-      // Utiliser la langue du navigateur
       const browserLang = navigator.language.split("-")[0]
       setLanguage(browserLang === "fr" ? "fr" : "en")
     }
   }, [])
 
-  // Effet pour appliquer le thème au document HTML
+  // 
+  // Appliquer le thème au document
   useEffect(() => {
-    // Appliquer la classe dark au document HTML pour Tailwind
+    // Appliquer la classe dark pour Tailwind
     if (theme === "dark") {
       document.documentElement.classList.add("dark")
     } else {
@@ -97,17 +95,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("theme", theme)
   }, [theme])
 
-  // Effet pour sauvegarder la langue
+  // Sauvegarder la langue
   useEffect(() => {
     localStorage.setItem("language", language)
   }, [language])
 
-  // Fonction pour basculer le thème
+  // Basculer le thème
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"))
   }
 
-  // Fonction pour basculer la langue
+  // Basculer la langue
   const toggleLanguage = () => {
     setLanguage((prevLang) => (prevLang === "fr" ? "en" : "fr"))
   }
