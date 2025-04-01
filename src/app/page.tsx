@@ -6,7 +6,7 @@ import WeatherSearch from "@/components/weather-search";
 import { useAppContext } from "@/context/app-context";
 
 export default function Home() {
-  const { theme } = useAppContext();
+  const { theme,translations } = useAppContext();
 
   const bgClass = theme === "dark" ? "bg-dark" : "bg-sky-50";
   const textClass = theme === "dark" ? "text-white" : "text-black";
@@ -16,10 +16,10 @@ export default function Home() {
         <div className="flex justify-between items-center mb-8">
           <Header />
         </div>
-          <WeatherSearch />
+        <WeatherSearch />
       </div>
       <div className="grid items-center justify-items-center max-h-screen p-4 pb-10 gap-5 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <p className={`transition-colors duration-300 ${textClass}`}>Made with</p>
+        <p className={`transition-colors duration-300 ${textClass}`}>{translations.made}</p>
         <div className="items-center sm:items-start">
           <Image
             className={theme === "dark" ? "invert" : ""}
