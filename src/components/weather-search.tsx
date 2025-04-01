@@ -17,7 +17,10 @@ interface WeatherData {
 }
 
 export default function WeatherSearch() {
-  const { translations } = useAppContext()
+  const {theme, translations } = useAppContext()
+
+  const bgClass = theme === "dark" ? "bg-dark" : "bg-white" ;
+  const textClass = theme === "dark" ? "text-white" : "text-black";
 
   // États pour stocker la ville saisie et les données météo
   const [city, setCity] = useState("")
@@ -53,11 +56,11 @@ export default function WeatherSearch() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-center mb-8">{translations.appTitle}</h1>
+      <h1 className={`text-3xl font-bold text-center mb-8 transition-colors duration-300 ${textClass}`}>{translations.appTitle}</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="city" className="block text-sm font-medium mb-1">
+          <label htmlFor="city" className={`block text-sm font-medium mb-1 transition-colors duration-300 ${textClass}`}>
             {translations.enterCity}
           </label>
           <input
@@ -65,20 +68,20 @@ export default function WeatherSearch() {
             id="city"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700"
+            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-700 transition-colors duration-300 ${textClass} ${bgClass}`} 
             placeholder={translations.placeholder}
           />
         </div>
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50 dark:bg-blue-600 dark:hover:bg-blue-700"
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors disabled:opacity-50 bg-blue-600 hover:bg-blue-700"
         >
           {loading ? translations.loading : translations.search}
         </button>
       </form>
 
-      {error && <div className="p-4 bg-red-100 text-red-700 rounded-md dark:bg-red-900 dark:text-red-200">{error}</div>}
+      {error && <div className="p-4 bg-red-100 text-red-700 rounded-md bg-red-900 text-red-200">{error}</div>}
 
       {weather && <WeatherDisplay weather={weather} />}
     </div>

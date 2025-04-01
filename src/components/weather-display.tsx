@@ -85,7 +85,7 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
 
   // Déterminer si le texte doit être foncé ou clair
   const isDarkBackground = theme === "dark" || weather.icon.startsWith("11") || weather.icon.endsWith("n")
-  const textColorClass = isDarkBackground ? "text-white" : "text-gray-800"
+  const textColorClass = isDarkBackground ? "text-white" : "text-black"
 
   return (
     <div className={`p-6 rounded-lg shadow-md transition-colors duration-500 ${backgroundColorClass}`}>
