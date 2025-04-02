@@ -2,17 +2,34 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import WeatherDisplay from "./weather-display"
+import CurrentDisplay from "./current-display"
+import ForecastDisplay from "./forecast-display"
 import { useAppContext } from "@/context/app-context"
 
 // Types pour les données météo
-interface WeatherData {
-  city: string
-  temperature: number
-  description: string
-  humidity: number
-  windSpeed: number
-  icon: string
+interface CurrentData {
+  city: string;
+  temperature: number;
+  description: string;
+  humidity: number;
+  windSpeed: number;
+  icon: string;
+}
+
+interface ForecastItem{
+  date: string;
+  temperature: number;
+  minTemp: number;
+  maxTemp: number;
+  description: string;
+  humidity: number;
+  windSpeed: number;
+  icon: string;
+}
+
+interface ForecastData {
+  city: string;
+  forecasts: ForecastItem[];
 }
 
 export default function WeatherSearch() {
@@ -23,12 +40,15 @@ export default function WeatherSearch() {
   // Stocker la ville saisie et les données météo
   const [city, setCity] = useState("")
   const [lastSearchedCity, setLastSearchedCity] = useState("")
-  const [weather, setWeather] = useState<WeatherData | null>(null)
+  const [weather, setWeather] = useState<CurrentData | null>(null)
+  const [forecast, setForecast] = useState<ForecastData | null>(null)
   const [loading, setLoading] = useState(false)
+  const [forecastLoading, setForecastLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [forecastError, setForecastError] = useState<string | null>(null)
 
   // Récupérer les données météo
-  const fetchWeatherData = async (cityName: string) => {
+  const fetchCurrentData = async (cityName: string) => {
     if (!cityName.trim()) return
 
     try {
@@ -52,22 +72,44 @@ export default function WeatherSearch() {
     }
   }
 
+  const fetchForecastData = async (cityName: string) => {
+    if (!cityName.trim()) return
+    try {
+      setForecastLoading(true);
+      setForecastError(null);
+      const response = await fetch(`/api/forecast?city=${encodeURIComponent(cityName)}&lang=${language}`)
+      if (!response.ok){
+        throw new Error(translations.forecastError ||"Erreur lors de la récupération des prévisions")
+      }
+      const data = await response.json();
+      setForecast(data);
+    } catch (err) {
+      setForecastError(translations.forecastError || "Erreur lors de la récupération des prévisions")
+      console.error("Erreur forecast:", err)
+    } finally {
+      setForecastLoading(false);
+    }
+  }
+
   // Appelée lors de la soumission du formulaire
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await fetchWeatherData(city)
+    await fetchCurrentData(city);
+    await fetchForecastData(city);
   }
 
   // Actualiser les données quand la langue change
   useEffect(() => {
     if (lastSearchedCity) {
-      fetchWeatherData(lastSearchedCity)
+      fetchCurrentData(lastSearchedCity)
+      fetchForecastData(lastSearchedCity)
     }
   }, [language]) // trigger quand la langue change
 
   return (
     <div className="space-y-6">
       <h1 className={`text-3xl font-bold text-center mb-8 transition-colors duration-300 ${textClass}`}>{translations.appTitle}</h1>
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="city" className={`block text-sm font-medium mb-1 transition-colors duration-300 ${textClass}`}>
@@ -90,8 +132,17 @@ export default function WeatherSearch() {
           {loading ? translations.loading : translations.search}
         </button>
       </form>
+
       {error && <div className="p-4 bg-red-100 text-red-700 rounded-md bg-red-900 text-red-200">{error}</div>}
-      {weather && <WeatherDisplay weather={weather} />}
+      
+      {weather && <CurrentDisplay weather={weather} />}
+      {forecastError && (
+        <div className="p-4 mt-4 bg-red-100 text-red-700 rounded-md bg-red-900 text-red-200">
+          {forecastError}
+        </div>
+      )}
+
+      {forecast && <ForecastDisplay forecastData={forecast} />} 
     </div>
   )
 }
