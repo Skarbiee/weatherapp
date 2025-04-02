@@ -21,18 +21,24 @@ const translationsData = {
     enterCity: "Entrez une ville",
     search: "Rechercher",
     loading: "Chargement...",
-    error: "Erreur lors de la récupération des données météo",
+    error: "Erreur lors de la récupération des données météo d'aujourd'hui",
     placeholder: "Paris, New York, Tokyo...",
     made: "Réalisée avec",
+    forecast: "Prévision sur 5 jours",
+    today: "Aujourd'hui",
+    forecastError: "Erreur lors de la récupération des prévisions"
   },
   en: {
     appTitle: "Weather App",
     enterCity: "Enter a city",
     search: "Search",
     loading: "Loading...",
-    error: "Error retrieving weather data",
+    error: "Error retrieving today's weather data",
     placeholder: "Paris, New York, Tokyo...",
     made: "Made with",
+    forecast: "5-Day Forecast",
+    today: "Today",
+    forecastError: "Error fetching forecast data"
   },
 }
 

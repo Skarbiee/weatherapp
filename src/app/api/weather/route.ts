@@ -1,20 +1,18 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
 
-const API_KEY = "adf16e66a51635ab5e4d4de683a23e99";
+// Use environment variable instead of hardcoding the API key
+const API_KEY = process.env.OPENWEATHERMAP_API_KEY
 
 export async function GET(request: Request) {
   try {
     // Récupération du paramètre city depuis l'URL
     const { searchParams } = new URL(request.url)
-    const city = searchParams.get("city");
-    const lang = searchParams.get("lang");
+    const city = searchParams.get("city")
+    const lang = searchParams.get("lang")
 
     if (!city) {
       // Si aucune ville n'est fournie, renvoyer une erreur 400
-      return NextResponse.json(
-        { error: "Le paramètre city est requis" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Le paramètre city est requis" }, { status: 400 })
     }
 
     // Appel à l'API OpenWeatherMap
@@ -48,9 +46,7 @@ export async function GET(request: Request) {
     return NextResponse.json(weatherData)
   } catch (error) {
     console.error("Erreur API:", error)
-    return NextResponse.json(
-      { error: "Erreur serveur lors de la récupération des données météo" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Erreur serveur lors de la récupération des données météo" }, { status: 500 })
   }
 }
+

@@ -12,7 +12,7 @@ export default function Home() {
   const textClass = theme === "dark" ? "text-white" : "text-black";
   return (
     <main className={`flex min-h-screen flex-col items-center p-4 md:p-24 transition-colors duration-300 ${bgClass}`}>
-      <div className="w-full max-w-md mx-auto">
+      <div className="w-full lg:max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <Header />
         </div>
